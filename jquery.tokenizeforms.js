@@ -18,8 +18,7 @@
  * - Add Data Caching
  * - Add Query Bypassing
  * - Add query term highlighting
- * - Add auto select result list item on query term when dropdown is shown
- * - Sense if the query results can fit in room left at the bottom of the viewport and adjust the position to compensate
+ * - Add auto select result list item on queryterm whendropdown is shown
  *
  * -- 
  * Status: 95% Complete
@@ -169,8 +168,8 @@ $.TokenList = function(input_field, options) {
             remove_token();
           } else if($(this).val().length <= 0 && !token_selected) {
             select_token();
-            run_query($(this).val());
           } else { run_query($(this).val()); }
+          run_query($(this).val());
           break;
         case key.esc:
           hide_dropdown();
