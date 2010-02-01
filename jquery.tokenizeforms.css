@@ -1,0 +1,13 @@
+.token-list { position: relative; display: block; padding: 6px; padding-bottom: 12px; padding-left: 3px; padding-right: 3px; border: 1px solid rgb(187,187,187); background-color: rgb(255,255,255); }
+.token-list .token-input-field, .token-list .token-complete, .token-list .token-selected { position: relative; display: inline; font-family: 'lucida grande', tahoma; font-size: 11px; margin: 3px; padding-top: 3px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; border-radius: 4px; -moz-border-radius: 4px; -webkit-border-radius: 4px; }
+.token-list .token-complete { border: 1px solid rgb(172,185,211); background-color: rgb(239,242,247); }
+.token-list .token-complete:hover { background-color: rgb(216,223,234); }
+.token-list .token-selected { background-color: rgb(86,112,166); color: rgb(255,255,255); }
+.token-list .token-input-field { border: 0px; outline: none; width: 50%; background: transparent; }
+
+.query-results { position: relative; list-style: none none; padding: 0px; margin: 0px; border-left: 1px solid rgb(187,187,187); border-right: 1px solid rgb(187,187,187); border-bottom: 1px solid rgb(187,187,187); }
+.query-results .query-result-token { position: relative; display: block; font-family: 'lucida grande', tahoma; font-size: 11px; background-color: rgb(255,255,255); }
+.query-results .query-result-token:hover { background-color: rgb(59,89,152); color: rgb(255,255,255); }
+.query-results .query-result-selected { background-color: rgb(86,112,166); color: rgb(255,255,255); }
+
+.clear { position: relative; display: block; height: 1px; width: 100%; clear: both; }

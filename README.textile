@@ -1,0 +1,56 @@
+h1. jquery.tokenizeforms.js
+
+This project goal was to combine a live search, a facebook like tokenized field, and an easy input plugin, in to one package.
+
+As the description says, you can turn any input into a facebook like, tokenized, live query system with a twist. This allows you to propagate with existing data in the field, to save field as data (not just firing off some search), and to add event handlers when tokens are selected, unselected, added, and removed.
+
+h1. Install
+
+Clone the repository:
+
+<pre>git clone git://github.com/m3talsmith/jquery-tokenizeforms.git</pre>
+
+Copy the javascript to your javascript directory and the css to your stylesheet directory, and style away.
+
+There are some default styles that you should feel free to override any of the styles. There will be a style guide in the wiki soon.
+
+h1. Usage Example
+
+Lets say we have a post that has multiple tags, and we store these tags in a single field with each tag separated by a comma. All we would have to do in our lovely form setup code is:
+
+<pre>
+  $("#post_tags").tokenizeInput({
+    url: "/live_searches/tags/",
+    disableQueryToken: true
+  });
+</pre>
+
+The url represents the url you are using for your live search; not the url your form is posting to.
+
+I'm making the assumption that your application is restful so I disabled the query token. This is optional.
+
+There are several option you can include in that hash and four events you can attach handlers to. I will fill that information out in the wiki as well.
+
+h1. Todo's
+
+* Add mouse handlers for results list
+
+* Check for any IE bugs
+
+* Add nice animations
+
+* Add token delete mouse handlers
+
+* Add Data Caching
+
+* Add Query Bypassing
+
+* Add query term highlighting
+
+* Add auto select result list item on query term when dropdown is shown
+
+* Sense if the query results can fit in room left at the bottom of the viewport and adjust the position to compensate
+
+h1. Status
+
+I feel like this is nearly complete: 95% there. I want to check off the todo's but this is feature complete as far as keyboard entry goes.
