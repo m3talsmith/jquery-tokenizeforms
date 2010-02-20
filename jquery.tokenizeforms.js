@@ -134,13 +134,15 @@ $.TokenList = function(input_field, options) {
           clear_results();
           hide_dropdown();
           
-          event.stopImmediatePropagation();
+          // event.stopImmediatePropagation();
+          event.preventDefault();
           enable_form_submit();
           return false;
           break;
         case key.down:
           select_next_result();
-          event.stopImmediatePropagation();
+          // event.stopImmediatePropagation();
+          event.preventDefault();
           return false;
           break;
         case key.up:
@@ -206,10 +208,20 @@ $.TokenList = function(input_field, options) {
   // --
   
   function create_token(value) {
-    var token = $("<span>" + value + "</span>")
-      .addClass("token-complete")
-      .appendTo(token_list);
-    onNewToken();
+    var duplicate_token = false;
+    if(token_list.find("span").length >= 1) {
+      token_list.find("span").each(function(){
+        if($(this).text() == value) { duplicate_token = true; }
+      });
+    }
+    if(!duplicate_token) {
+      tokens.push(value);
+      var token = $("<span>" + value + "</span>")
+        .addClass("token-complete")
+        .appendTo(token_list);
+      input_field.val(tokens.join(","));
+      onNewToken();
+    }
   }
   
   function deselect_token() {
@@ -229,11 +241,22 @@ $.TokenList = function(input_field, options) {
   }
   
   function remove_token() {
+    var value = token_list.find(".token-selected:first").text();
     token_list.find(".token-selected:first").remove();
     token_selected = false;
+    token_list.find(".token-complete").each(function() {
+      tokens = [];
+      tokens.push($(this).text());
+    });
+    input_field.val(tokens.join(","));
     clear_results();
     hide_dropdown();
     onRemoveToken();
+  }
+  
+  function remove_token_immediately() {
+    select_token();
+    remove_token();
   }
   
   function show_dropdown() {
@@ -266,8 +289,8 @@ $.TokenList = function(input_field, options) {
     if(selected_result != "" && result_list.children().index(selected_result.prev()) >= 0) {
       selected_result.removeClass("query-result-selected");
       selected_result = selected_result.prev();
+      selected_result.addClass("query-result-selected");
     }
-    selected_result.addClass("query-result-selected");
   }
   
   function populate_dropdown(json) {
