@@ -39,8 +39,6 @@ h1. Todo's
 
 * Add nice animations
 
-* Add token delete mouse handlers
-
 * Add Data Caching
 
 * Add Query Bypassing
