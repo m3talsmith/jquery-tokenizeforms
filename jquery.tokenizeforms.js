@@ -14,7 +14,6 @@
  * - Add mouse handlers for results list
  * - Check for any IE bugs
  * - Add nice animations
- * - Add token delete mouse handlers
  * - Add Data Caching
  * - Add Query Bypassing
  * - Add query term highlighting
@@ -223,6 +222,15 @@ $.TokenList = function(input_field, options) {
       tokens.push(value);
       var token = $("<span>" + value + "</span>")
         .addClass("token-complete")
+        .css("cursor", "pointer")
+        .click(function(){
+          var token = $(this);
+          clear_selected_tokens();
+          token
+            .removeClass("token-complete")
+            .addClass("token-selected");
+          remove_token();
+        })
         .appendTo(token_list);
       input_field.val(tokens.join(","));
       onNewToken();
@@ -256,6 +264,14 @@ $.TokenList = function(input_field, options) {
     clear_results();
     hide_dropdown();
     onRemoveToken();
+  }
+  
+  function clear_selected_tokens() {
+    token_list.find(".token-selected").each(function(){
+      $(this)
+        .addClass("token-complete")
+        .removeClass("token-selected");
+    });
   }
   
   function remove_token_immediately() {
@@ -311,12 +327,12 @@ $.TokenList = function(input_field, options) {
   function run_query(query){
     // setup simple variables for complex builds
     var queryDelimiter = options.url.indexOf("?") < 0 ? "?" : "&";
-    var full_url = url + (options.disableQueryToken != undefined ? query : queryDelimeter + queryToken + "=" + query);
+    var merged_url = url + (options.disableQueryToken != undefined ? query : queryDelimeter + queryToken + "=" + query);
     var type = options.method != undefined ? options.method : "get";
     
     $.ajax({
       type:     type,
-      url:      full_url,
+      url:      merged_url,
       dataType: "json",
       success:  function(json, status) {
         populate_dropdown(json);
