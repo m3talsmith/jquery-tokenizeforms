@@ -68,6 +68,11 @@ $.TokenList = function(input_field, options) {
     if(options.onRemoveToken)   { onRemoveToken   = options.onRemoveToken;    }
   // --
   
+  // set other options up
+    var url         = options.url;
+    var queryToken  = options.queryToken;
+  // --
+  
   var input_field = $(input_field);
   var parent = $(input_field).parent();
   
@@ -306,12 +311,12 @@ $.TokenList = function(input_field, options) {
   function run_query(query){
     // setup simple variables for complex builds
     var queryDelimiter = options.url.indexOf("?") < 0 ? "?" : "&";
-    var url = options.url + (options.disableQueryToken != undefined ? query : queryDelimeter + options.queryToken + "=" + query);
+    var full_url = url + (options.disableQueryToken != undefined ? query : queryDelimeter + queryToken + "=" + query);
     var type = options.method != undefined ? options.method : "get";
     
     $.ajax({
       type:     type,
-      url:      url,
+      url:      full_url,
       dataType: "json",
       success:  function(json, status) {
         populate_dropdown(json);
