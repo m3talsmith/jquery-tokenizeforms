@@ -241,11 +241,10 @@ $.TokenList = function(input_field, options) {
   }
   
   function remove_token() {
-    var value = token_list.find(".token-selected:first").text();
     token_list.find(".token-selected:first").remove();
     token_selected = false;
+    tokens = [];
     token_list.find(".token-complete").each(function() {
-      tokens = [];
       tokens.push($(this).text());
     });
     input_field.val(tokens.join(","));
