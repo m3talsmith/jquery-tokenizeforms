@@ -22,8 +22,25 @@
  * -- 
  * Status: 95% Complete
  *
+ * --
+ * Notes: Added a monkey patch for Javascript to check for array duplicates.
+ *
+ * Usage:
+ * [1,2,3].includes(2) // true
+ * [1,2,3].includes(4) // false
+ *
  */
  
+/* Array Monkey Patching */
+Array.prototype.includes = function(value) {
+  var length = this.length;
+  for(var i=0; i < length; i++) {
+    if(this[i] == value) { return true; }
+  }
+  return false;
+}
+
+/* Plugin code */
 $.fn.tokenizeInput = function(options) {
   var options = $.extend(options);
   
@@ -274,24 +291,26 @@ $.TokenList = function(input_field, options) {
     });
   }
   
+  // Marked for depreciation
   function remove_token_immediately() {
     select_token();
     remove_token();
   }
+  // --
   
   function show_dropdown() {
-    result_list.show();
+    result_list.show(); // I really should animate this
     dropdown_hidden = false;
   }
   
   function hide_dropdown() {
-    result_list.hide();
+    result_list.hide(); // I really should animate this
     dropdown_hidden = true;
   }
   
   function clear_results() {
     results = [];
-    result_list.empty();
+    result_list.empty(); // I really should animate this
     selected_result = "";
   }
   
@@ -303,6 +322,15 @@ $.TokenList = function(input_field, options) {
       selected_result = selected_result.next();
     }
     selected_result.addClass("query-result-selected");
+    /*
+      .click(function(){
+        create_token($(this).html());
+        false_input_field.appendTo(token_list).focus().val("");
+        if(token_selected) { unselect_token(); }
+        clear_results();
+        hide_dropdown();
+      })
+    */
   }
   
   function select_previous_result() {
@@ -316,10 +344,13 @@ $.TokenList = function(input_field, options) {
   function populate_dropdown(json) {
     clear_results();
     $(json).each(function(){
-      results.push(this.name);
-      var result = $("<span>" + this.name + "</span>")
-        .addClass("query-result-token")
-        .appendTo(result_list);
+      name = this.name;
+      if(!results.includes(name)) {
+        results.push(name);
+        var result = $("<span>" + name + "</span>")
+          .addClass("query-result-token")
+          .appendTo(result_list);
+      }
     });
     if(dropdown_hidden){show_dropdown();}
   }
