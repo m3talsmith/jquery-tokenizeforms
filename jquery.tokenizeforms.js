@@ -139,9 +139,9 @@ $.TokenList = function(input_field, options) {
       switch(event.keyCode) {
         case key.apple:
           break;
-        case key.tab:
+        // case key.tab:
           // break default tab use for this field
-            if(options.tabCompletion){event.preventDefault();}
+            // if(options.tabCompletion){event.preventDefault();}
           // --
         case key.enter:
           disable_form_submit();
