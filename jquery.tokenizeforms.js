@@ -121,6 +121,8 @@ $.TokenList = function(input_field, options) {
     create_token(this);
   });
   
+  var focused = false;
+  
   var false_input_field = $("<input type='text' />")
     .addClass("token-input-field")
     .css({
@@ -129,19 +131,24 @@ $.TokenList = function(input_field, options) {
     .focus(function(){
       if(token_selected) { deselect_token(); }
       if($(this).val().length > 0){
+        focused = true;
         run_query($(this).val());
         show_dropdown();
       }
     })
     .blur(function(){
-      if(token_selected) { deselect_token(); }
       hide_dropdown();
+      if(token_selected) { deselect_token(); }
+      focused = false;
     })
     .keydown(function(event){
       switch(event.keyCode) {
         case key.apple:
           break;
-        // case key.tab:
+        case key.tab:
+          hide_dropdown();
+          if(token_selected) { deselect_token(); }
+          break;
           // break default tab use for this field
             // if(options.tabCompletion){event.preventDefault();}
           // --
@@ -366,7 +373,8 @@ $.TokenList = function(input_field, options) {
       url:      merged_url,
       dataType: "json",
       success:  function(json, status) {
-        populate_dropdown(json);
+        if(focused) { populate_dropdown(json); }
+        else { focused = false; }
       }
       // error:    function(request, status, errorMessage) {alert(errorMessage);},
       // complete: function(request, status) {alert(status);}
