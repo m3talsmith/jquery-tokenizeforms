@@ -128,8 +128,10 @@ $.TokenList = function(input_field, options) {
     })
     .focus(function(){
       if(token_selected) { deselect_token(); }
-      run_query($(this).val());
-      show_dropdown();
+      if($(this).val().length > 0){
+        run_query($(this).val());
+        show_dropdown();
+      }
     })
     .blur(function(){
       if(token_selected) { deselect_token(); }
@@ -187,12 +189,9 @@ $.TokenList = function(input_field, options) {
           return false;
           break;
         case key.backspace:
-          if(token_selected){
-            remove_token();
-          } else if($(this).val().length <= 0 && !token_selected) {
-            select_token();
-          } else { run_query($(this).val()); }
-          run_query($(this).val());
+          if(token_selected){ remove_token(); }
+          else if($(this).val().length <= 0 && !token_selected) { select_token(); hide_dropdown(); }
+          else if($(this).val().length > 0)                     { run_query($(this).val()); }
           break;
         case key.esc:
           hide_dropdown();
@@ -200,6 +199,7 @@ $.TokenList = function(input_field, options) {
           break;
         default:
           if(token_selected) { deselect_token(); }
+          $(this).focus();
           run_query($(this).val());
       }
     });
