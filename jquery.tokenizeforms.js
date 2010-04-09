@@ -14,7 +14,7 @@
  * - Add mouse handlers for results list
  * - Check for any IE bugs
  * - Add nice animations
- * - Add Data Caching
+ * - Add Data Cache Expiration
  * - Add Query Bypassing
  * - Add query term highlighting
  * - Add auto select result list item on queryterm whendropdown is shown
@@ -87,6 +87,8 @@ $.TokenList = function(input_field, options) {
   // set other options up
     var url         = options.url;
     var queryToken  = options.queryToken;
+    var input_cache = [];
+    if(options.cache_data) {input_cache = cache_data};
   // --
   
   var input_field = $(input_field);
@@ -362,7 +364,21 @@ $.TokenList = function(input_field, options) {
     if(dropdown_hidden){show_dropdown();}
   }
   
-  function run_query(query){
+  function populate_cache_from_json(json) {
+    $(json).each(function(){
+      input_cache.push(this.name);
+    });
+  }
+  
+  function find_in_cache(query) {
+    var cache_matches = [];
+    $(input_cache).each(function(index) {
+      if(input_cache[index].match(query)) { cache_matches.push({name:input_cache[index]}); }
+    });
+    return cache_matches;
+  }
+  
+  function find_in_database(query) {
     // setup simple variables for complex builds
     var queryDelimiter = options.url.indexOf("?") < 0 ? "?" : "&";
     var merged_url = url + (options.disableQueryToken != undefined ? query : queryDelimeter + queryToken + "=" + query);
@@ -373,12 +389,26 @@ $.TokenList = function(input_field, options) {
       url:      merged_url,
       dataType: "json",
       success:  function(json, status) {
+        populate_cache_from_json(json);
         if(focused) { populate_dropdown(json); }
         else { focused = false; }
       }
       // error:    function(request, status, errorMessage) {alert(errorMessage);},
       // complete: function(request, status) {alert(status);}
     });
+  }
+  
+  function run_query(query){
+    if(input_cache.length > 0) {
+      var cached_results = find_in_cache(query);
+      if(cached_results.length > 0) {
+        populate_dropdown(cached_results);
+      } else {
+        find_in_database(query);
+      }
+    } else {
+      find_in_database(query);
+    }
   }
   
   return token_list;

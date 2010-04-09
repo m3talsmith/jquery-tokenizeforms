@@ -29,6 +29,16 @@ The url represents the url you are using for your live search; not the url your 
 
 I'm making the assumption that your application is restful so I disabled the query token. This is optional.
 
+If we already have some data to help cache the query we can simply:
+
+<pre>
+  $("#post_tags").tokenizeInput({
+    url: "/live_searches/tags/",
+    disableQueryToken: true,
+    cache_data: ["blue ribbon", "blue", "blue button"]
+  });
+</pre>
+
 There are several option you can include in that hash and four events you can attach handlers to. I will fill that information out in the wiki as well.
 
 h1. Todo's
@@ -39,7 +49,7 @@ h1. Todo's
 
 * Add nice animations
 
-* Add Data Caching
+* Add Data Caching Expiration
 
 * Add Query Bypassing
 
